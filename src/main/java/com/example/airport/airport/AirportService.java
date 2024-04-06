@@ -38,8 +38,11 @@ public class AirportService implements IAirportService {
 
   @Override
   public SimpleAirportResponce addNewAirport(AirportRequest request) {
-    var airport = Airport.builder().name(request.getName()).city(request.getCity())
-        .country(request.getCountry()).build();
+    var airport = Airport.builder()
+        .name(request.getName())
+        .city(request.getCity())
+        .country(request.getCountry())
+        .build();
     airportRepository.save(airport);
     SimpleAirportResponce responce = new SimpleAirportResponce(airport);
     return responce;
@@ -66,12 +69,12 @@ public class AirportService implements IAirportService {
   @Override
   public void deleteAirport(String id) {
     Optional<Airport> airport = airportRepository.findById(id);
-    if (airport.isPresent()) {
-      flightRepository.findAll()
-          .removeIf(flight -> flight.getAirport().getId() == airport.get().getId());
-      airportRepository.deleteById(id);
+    if (!airport.isPresent()) {
+      throw new ApiRequestException("Airport Not Found " + id);
     }
-    throw new ApiRequestException("Airport Not Found " + id);
+    flightRepository.findAll()
+      .removeIf(flight -> flight.getAirport().getId() == airport.get().getId());
+    airportRepository.deleteById(id);
   }
 
   @Override
