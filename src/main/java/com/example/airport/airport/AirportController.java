@@ -2,6 +2,7 @@ package com.example.airport.airport;
 
 import java.util.List;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,12 +48,14 @@ public class AirportController {
     return ResponseEntity.ok(airportService.addNewAirport(request));
   }
 
+  @CrossOrigin
   @PutMapping("/{id}")
   ResponseEntity<AirportResponce> putAirport(@PathVariable String id,
       @RequestBody AirportRequest airport) {
     return ResponseEntity.ok(airportService.updateAirport(id, airport));
   }
 
+  @CrossOrigin
   @DeleteMapping("/{id}")
   void deleteAirport(@PathVariable String id) {
     airportService.deleteAirport(id);
