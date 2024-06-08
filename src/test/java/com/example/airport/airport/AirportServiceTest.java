@@ -2,7 +2,6 @@ package com.example.airport.airport;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -12,13 +11,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.assertj.core.api.Assertions;
-import org.hibernate.id.UUIDGenerator;
-import org.hibernate.id.uuid.UuidGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.example.airport.flight.Flight;
