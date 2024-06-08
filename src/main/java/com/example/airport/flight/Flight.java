@@ -1,13 +1,16 @@
 package com.example.airport.flight;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.annotations.UuidGenerator;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.example.airport.airport.Airport;
 import com.example.airport.booking.Booking;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -36,7 +39,7 @@ public class Flight {
   private String id;
 
   @Column(name = "arrivalDate", nullable = false)
-  private Date arrivalDate;
+  private LocalDate arrivalDate;
 
   @ManyToOne
   @JoinColumn(name = "airport_id", nullable = false)
