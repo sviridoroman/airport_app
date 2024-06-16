@@ -60,8 +60,12 @@ public class BookingService implements IBookingService {
     if (optionalFlight.isPresent()) {
       Flight flight = optionalFlight.get();
       User user = userRepository.findByEmail(jwtAuthentificationFilter.getUserEmail()).get();
-      var booking = Booking.builder().flight(flight).user(user).count(request.getCount())
-          .total(flight.getPrice() * request.getCount()).build();
+      var booking = Booking.builder()
+        .flight(flight)
+        .user(user)
+        .count(request.getCount())
+        .total(flight.getPrice() * request.getCount())
+        .build();
       bookedFlightRepository.save(booking);
       return new BookingResponce(booking);
     }
