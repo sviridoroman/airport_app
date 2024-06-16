@@ -3,6 +3,7 @@ package com.example.airport.flight;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,17 +38,14 @@ public class FlightController {
     return ResponseEntity.ok(flightService.addFlight(request));
   }
 
+  @CrossOrigin
   @PutMapping("/{id}")
   ResponseEntity<FlightResponse> putFlight(@PathVariable String id,
       @RequestBody FlightRequest request) {
     return ResponseEntity.ok(flightService.updateFlight(id, request));
   }
-
-  @PutMapping("/switch/{id}")
-  ResponseEntity<FlightResponse> switchFlight(@PathVariable String id) {
-    return ResponseEntity.ok(flightService.switchCompleted(id));
-  }
-
+  
+  @CrossOrigin
   @DeleteMapping("/{id}")
   public void deleteById(@PathVariable String id) {
     flightService.deleteAirport(id);

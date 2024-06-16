@@ -1,7 +1,6 @@
 package com.example.airport.flight;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,8 +40,13 @@ public class FlightService implements IFlightService {
   public FlightResponse addFlight(FlightRequest request) {
     Optional<Airport> airport = airportRepository.findById(request.getAirportId());
     if (airport.isPresent()) {
-      var flight = Flight.builder().arrivalDate(new Date()).airport(airport.get())
-          .price(request.getPrice()).completed(request.isCompleted()).build();
+      var flight = Flight
+        .builder()
+        .arrivalDate(request.getArrivalDate())
+        .airport(airport.get())
+        .price(request.getPrice())
+        .completed(request.isCompleted())
+        .build();
       flightRepository.save(flight);
       FlightResponse response = new FlightResponse(flight);
       return response;
@@ -67,10 +71,10 @@ public class FlightService implements IFlightService {
   @Override
   public void deleteAirport(String id) {
     Optional<Flight> flight = flightRepository.findById(id);
-    if (flight.isPresent()) {
-      flightRepository.deleteById(id);
+    if (!flight.isPresent()) {
+      throw new ApiRequestException("Flight Not Found " + id);
     }
-    throw new ApiRequestException("Flight Not Found " + id);
+    flightRepository.deleteById(id);
   }
 
   @Override
@@ -88,18 +92,6 @@ public class FlightService implements IFlightService {
         .filter(flight -> flight.getAirport().getName() == airportName)
         .forEach((flight) -> response.add(new FlightResponse(flight)));
     return response;
-  }
-
-  public FlightResponse switchCompleted(String id) {
-    Optional<Flight> flight = flightRepository.findById(id);
-    if (flight.isPresent()) {
-      Flight flightToComplete = flight.get();
-      flightToComplete.setCompleted(!flightToComplete.isCompleted());
-      flightRepository.save(flightToComplete);
-      FlightResponse response = new FlightResponse(flightToComplete);
-      return response;
-    }
-    throw new ApiRequestException("Flight Not Found " + id);
   }
 
 }
