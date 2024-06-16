@@ -29,7 +29,7 @@ public class BookingController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<BookingResponce> getMethodName(@PathVariable String id) {
+  public ResponseEntity<BookingResponce> getBooking(@PathVariable String id) {
     return bookingService.getBookingById(id);
   }
 

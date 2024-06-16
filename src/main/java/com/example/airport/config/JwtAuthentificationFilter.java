@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 public class JwtAuthentificationFilter extends OncePerRequestFilter {
 
   private final JwtService jwtService;
-
   private final UserDetailsService userDetailsService;
 
   private String userEmail;
@@ -33,11 +32,11 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(@NonNull HttpServletRequest request,
-      @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
-      throws ServletException, IOException {
+      @NonNull HttpServletResponse response, 
+      @NonNull FilterChain filterChain
+      ) throws ServletException, IOException {
     final String authHeader = request.getHeader("Authorization");
     final String jwt;
-
 
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
       filterChain.doFilter(request, response);
@@ -49,7 +48,6 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
     if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
       UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
       if (jwtService.isTokenValid(jwt, userDetails)) {
-
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             userDetails, null, userDetails.getAuthorities());
