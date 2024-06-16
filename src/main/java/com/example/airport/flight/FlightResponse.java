@@ -1,6 +1,8 @@
 package com.example.airport.flight;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +16,8 @@ import lombok.NoArgsConstructor;
 public class FlightResponse {
 
   private String id;
-  private Date arrivalDate;
+  @JsonFormat(pattern = "yyyy-MM-dd")
+  private LocalDate arrivalDate;
   private String airportId;
   private int price;
   private boolean completed;
