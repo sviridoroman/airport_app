@@ -1,5 +1,6 @@
 package com.example.airport;
 
+import java.security.Principal;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,13 @@ public class WelcomeController {
     String userId = user.get().getId();
 
     return ResponseEntity.ok("Welcome " + jwtAuthentificationFilter.getUserEmail() + " " + userId);
+  }
+
+  @GetMapping("/user")
+  public String userAccess(Principal principal) {
+    if (principal == null)
+      return null;
+    return principal.getName();
   }
 
 }
