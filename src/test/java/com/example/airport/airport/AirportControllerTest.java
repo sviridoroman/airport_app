@@ -24,19 +24,22 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import com.example.airport.flight.Flight;
 import com.example.airport.flight.FlightRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
 
 class AirportControllerTest {
@@ -67,8 +70,7 @@ class AirportControllerTest {
     Mockito.when(airportService.getAllAirports()).thenReturn(Arrays.asList(new SimpleAirportResponce(aiport)));
   
     mockMvc
-      .perform(get("http://localhost:8080/airport").with(SecurityMockMvcRequestPostProcessors.user("admin").password("admin").roles("ADMIN"))
-      // .with(SecurityMockMvcRequestPostProcessors.jwt().authorities(new SimpleGrantedAuthority("admin"))))
+      .perform(get("http://localhost:8080/airport")
       ).andExpect(MockMvcResultMatchers.status().isOk())
       .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is("name")));
   }
@@ -91,8 +93,22 @@ class AirportControllerTest {
   }
 
   @Test
-  void testPostAirport() {
-    fail("Not yet implemented");
+  void testPostAirport() throws Exception {
+    String airportId = UUID.randomUUID().toString();
+    Airport aiport = Airport.builder()
+    .id(airportId)
+    .name("name")
+    .city("city")
+    .country("country")
+    .flights(new ArrayList<Flight>())
+    .build();
+
+    mockMvc.perform(
+      post("http://localhost:8080/airport")
+        .content(new ObjectMapper().writeValueAsString(aiport))
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON))
+      .andExpect(MockMvcResultMatchers.status().isCreated());
   }
 
   @Test
