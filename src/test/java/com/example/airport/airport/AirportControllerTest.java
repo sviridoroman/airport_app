@@ -108,7 +108,8 @@ class AirportControllerTest {
         .content(new ObjectMapper().writeValueAsString(aiport))
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON))
-      .andExpect(MockMvcResultMatchers.status().isCreated());
+      .andExpect(MockMvcResultMatchers.status().isCreated())
+      .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(aiport.getName()));
   }
 
   @Test
